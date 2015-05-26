@@ -21,15 +21,21 @@ public class CollectResource : MonoBehaviour {
 		print ("Found Tree");
 
 		{
-		// Check if we've reached the destination
 
-			{
-				dist = NavMeshAgent.remainingDistance;
-				print(dist);
-
-			}
 				
 				}
+	}
+	void Update(){
+		// Check if we've reached the destination
+		
+		{
+			
+			NavMeshAgent agent = this.GetComponent<NavMeshAgent>();
+			dist = agent.remainingDistance;
+			print(dist);
+			print ("Tada");
+			
+		}
 	}
 }
 
