@@ -10,7 +10,6 @@ public class MousePoint : MonoBehaviour
 	public Transform Target;
 
 	private Vector3 mouseDownPoint;
-	 
 
 	void awake()
 	{
