@@ -43,26 +43,26 @@ public class CameraMovement : MonoBehaviour
 		}
 		else
 		{
-			// Move camera if mouse pointer reaches screen borders
-			if (Input.mousePosition.x < ScrollArea)
-			{
-				translation += Vector3.right * -ScrollSpeed * Time.deltaTime;
-			}
-			
-			if (Input.mousePosition.x >= Screen.width - ScrollArea)
-			{
-				translation += Vector3.right * ScrollSpeed * Time.deltaTime;
-			}
-			
-			if (Input.mousePosition.y < ScrollArea)
-			{
-				translation += Vector3.forward * -ScrollSpeed * Time.deltaTime;
-			}
-			
-			if (Input.mousePosition.y > Screen.height - ScrollArea)
-			{
-				translation += Vector3.forward * ScrollSpeed * Time.deltaTime;
-			}
+//			// Move camera if mouse pointer reaches screen borders
+//			if (Input.mousePosition.x < ScrollArea)
+//			{
+//				translation += Vector3.right * -ScrollSpeed * Time.deltaTime;
+//			}
+//			
+//			if (Input.mousePosition.x >= Screen.width - ScrollArea)
+//			{
+//				translation += Vector3.right * ScrollSpeed * Time.deltaTime;
+//			}
+//			
+//			if (Input.mousePosition.y < ScrollArea)
+//			{
+//				translation += Vector3.forward * -ScrollSpeed * Time.deltaTime;
+//			}
+//			
+//			if (Input.mousePosition.y > Screen.height - ScrollArea)
+//			{
+//				translation += Vector3.forward * ScrollSpeed * Time.deltaTime;
+//			}
 		}
 		
 		// Keep camera within level and zoom area

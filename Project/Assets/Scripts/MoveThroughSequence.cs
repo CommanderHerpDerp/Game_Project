@@ -21,7 +21,7 @@ public class MoveThroughSequence : MonoBehaviour
 		targets = new Vector3[testPoints];
 		for (int a=0; a<testPoints; a++) {
 			targets[a]=new Vector3 (testRadius * Mathf.Cos(2*a * Mathf.PI /testPoints),0,testRadius * Mathf.Sin(2*a * Mathf.PI /testPoints));
-			GameObject markerObj = Instantiate (marker, targets[a] + new Vector3(0,4,0), Quaternion.identity) as GameObject;
+			Instantiate (marker, targets[a] + new Vector3(0,4,0), Quaternion.identity) as GameObject;
 		}
 
 		agent.destination = targets [i];
@@ -32,7 +32,7 @@ public class MoveThroughSequence : MonoBehaviour
 		//check if at next point
 		if (agent.remainingDistance < agent.stoppingDistance) {
 			//move to next point or back to first if at the last point
-			if(i == targets.Length)
+			if(i == targets.Length-1)
 				i=0;
 			else
 				i++;
