@@ -7,24 +7,20 @@ public class MoveThroughSequence : MonoBehaviour
 	NavMeshAgent agent;
 	int i=0;
 	public Transform marker;
-
+	public float CollectTime =5;
+	private float CollectTimer;
 
 
 	// Use this for initialization
 	void Start () {
 		agent = GetComponent<NavMeshAgent>();
+		targets = new Vector3[2];
+		targets[0] = GameObject.Find("tree").transform.position;
+		print ("Found Tree");
+		targets [1] = transform.position;
 
 
-		//Generate test movement points and put a marker 4 units above each point.
-		int testRadius = 15;
-		int testPoints = 5;
-		targets = new Vector3[testPoints];
-		for (int a=0; a<testPoints; a++) {
-			targets[a]=new Vector3 (testRadius * Mathf.Cos(2*a * Mathf.PI /testPoints),0,testRadius * Mathf.Sin(2*a * Mathf.PI /testPoints));
-			Instantiate (marker, targets[a] + new Vector3(0,4,0), Quaternion.identity);
-		}
 
-		agent.destination = targets [i];
 	}
 	
 	// Update is called once per frame
@@ -32,13 +28,52 @@ public class MoveThroughSequence : MonoBehaviour
 		//check if at next point
 		if (agent.remainingDistance < agent.stoppingDistance) {
 			//move to next point or back to first if at the last point
-			if(i == targets.Length-1)
+
+			CollectTimer += Time.deltaTime;
+			if (CollectTimer >= CollectTime){
+				 GameObject.Find ("tree").GetComponent<DestroyParentGameObject>();
+
+			if(i == targets.Length-1){
 				i=0;
+					targets[0] = GameObject.Find("tree").transform.position;
+					print ("Found Tree");
+					targets [1] = transform.position;
+
+				}
 			else
 				i++;
+
+			CollectTimer=0;
+			}
+
+
 
 			//next destination
 			agent.destination=targets[i];
 		}
 	}
+
+
+
+
+
+	void GenerateTestPoints (){
+
+//Generate test movement points and put a marker 4 units above each point.
+int testRadius = 15;
+int testPoints = 5;
+targets = new Vector3[testPoints];
+for (int a=0; a<testPoints; a++) {
+	targets[a]=new Vector3 (testRadius * Mathf.Cos(2*a * Mathf.PI /testPoints),0,testRadius * Mathf.Sin(2*a * Mathf.PI /testPoints));
+	Instantiate (marker, targets[a] + new Vector3(0,4,0), Quaternion.identity);
+	}
+	
+	agent.destination = targets [i];
 }
+}
+
+
+
+
+
+
