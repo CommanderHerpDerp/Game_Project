@@ -5,7 +5,7 @@
 	<Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
 	<ProductVersion>10.0.20506</ProductVersion>
 	<SchemaVersion>2.0</SchemaVersion>
-	<ProjectGuid>{E90FC4B3-7A11-75BC-F9F6-10944A1E1101}</ProjectGuid>
+	<ProjectGuid>{5B9FF267-005F-A3BF-219E-FEAE2D8C894F}</ProjectGuid>
 	<OutputType>Library</OutputType>
 	<AppDesignerFolder>Properties</AppDesignerFolder>
 	<RootNamespace></RootNamespace>
@@ -53,6 +53,7 @@
      <Compile Include="Assets\Scripts\DestroyParentGameObject.cs" />
      <Compile Include="Assets\Scripts\MousePoint.cs" />
      <Compile Include="Assets\Scripts\MoveAndReturn.cs" />
+     <Compile Include="Assets\Scripts\MoveThroughSequence.cs" />
      <Compile Include="Assets\Scripts\MoveTo.cs" />
      <Compile Include="Assets\Scripts\PlaceableBuilding.cs" />
  <Reference Include="UnityEngine.UI">
