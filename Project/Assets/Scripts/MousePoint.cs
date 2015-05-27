@@ -31,9 +31,9 @@ public class MousePoint : MonoBehaviour
 
 		 {
 
-				if (Input.GetMouseButtonDown (0)) {
-					GameObject targetObj = Instantiate (Target, hit.point, Quaternion.identity) as GameObject;
-					targetObj.name = "Target";
+				 //if (Input.GetMouseButtonDown (0)) {
+					//GameObject targetObj = Instantiate (Target, hit.point, Quaternion.identity) as GameObject;
+					//targetObj.name = "Target";
 				}
 			}
 		}
@@ -41,5 +41,5 @@ public class MousePoint : MonoBehaviour
 
 
 
-}
+
 
