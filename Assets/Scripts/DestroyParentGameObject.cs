@@ -3,8 +3,8 @@ using System.Collections;
 
 public class DestroyParentGameObject : MonoBehaviour {
 
-	void Start()
+	public void DestroyObj()
 	{
-		Destroy(this.gameObject.transform.parent.gameObject);
+		Destroy(this.gameObject);
 	}
 }

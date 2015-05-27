@@ -18,9 +18,6 @@ public class MoveThroughSequence : MonoBehaviour
 		targets[0] = GameObject.Find("tree").transform.position;
 		print ("Found Tree");
 		targets [1] = transform.position;
-
-
-
 	}
 	
 	// Update is called once per frame
@@ -31,7 +28,8 @@ public class MoveThroughSequence : MonoBehaviour
 
 			CollectTimer += Time.deltaTime;
 			if (CollectTimer >= CollectTime){
-				 GameObject.Find ("tree").GetComponent<DestroyParentGameObject>();
+				DestroyParentGameObject TreeObjScript=GameObject.Find("tree").GetComponent<DestroyParentGameObject>();
+				TreeObjScript.DestroyObj();
 
 			if(i == targets.Length-1){
 				i=0;
@@ -59,16 +57,15 @@ public class MoveThroughSequence : MonoBehaviour
 
 	void GenerateTestPoints (){
 
-//Generate test movement points and put a marker 4 units above each point.
-int testRadius = 15;
-int testPoints = 5;
-targets = new Vector3[testPoints];
-for (int a=0; a<testPoints; a++) {
-	targets[a]=new Vector3 (testRadius * Mathf.Cos(2*a * Mathf.PI /testPoints),0,testRadius * Mathf.Sin(2*a * Mathf.PI /testPoints));
-	Instantiate (marker, targets[a] + new Vector3(0,4,0), Quaternion.identity);
-	}
-	
-	agent.destination = targets [i];
+		//Generate test movement points and put a marker 4 units above each point.
+		int testRadius = 15;
+		int testPoints = 5;
+		targets = new Vector3[testPoints];
+		for (int a=0; a<testPoints; a++) {
+			targets[a]=new Vector3 (testRadius * Mathf.Cos(2*a * Mathf.PI /testPoints),0,testRadius * Mathf.Sin(2*a * Mathf.PI /testPoints));
+			Instantiate (marker, targets[a] + new Vector3(0,4,0), Quaternion.identity);
+		}
+		agent.destination = targets [i];
 }
 }
 
