@@ -1,23 +1,30 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class MoveThroughSequence : MonoBehaviour
 {
-	Vector3[] targets;
+	List<Vector3> targets;
 	NavMeshAgent agent;
 	int i=0;
 	public Transform marker;
 	public float CollectTime =5;
 	private float CollectTimer;
+	private GameObject TreeObj;
 
 
 	// Use this for initialization
 	void Start () {
 		agent = GetComponent<NavMeshAgent>();
-		targets = new Vector3[2];
-		targets[0] = GameObject.FindWithTag("tree").transform.position;
-		print ("Found Tree");
-		targets [1] = transform.position;
+		targets = new List<Vector3> ();
+		TreeObj = GameObject.FindWithTag ("tree");
+		if (TreeObj != null) {
+			targets.Add(TreeObj.transform.position);
+			print ("Found Tree");
+			targets.Add(transform.position);
+			agent.destination=targets[0];
+			TreeObj.tag = "tree.tagged";
+		}
 	}
 	
 	// Update is called once per frame
@@ -28,30 +35,37 @@ public class MoveThroughSequence : MonoBehaviour
 
 			CollectTimer += Time.deltaTime;
 			if (CollectTimer >= CollectTime){
-				GameObject TreeObj = GameObject.FindWithTag ("tree");
-				if(TreeObj!=null){
-					if (i==0){
-						DestroyParentGameObject TreeObjScript=TreeObj.GetComponent<DestroyParentGameObject>();
-						TreeObjScript.DestroyObj();
-					}
-					if(i == targets.Length-1){
-						i=0;
-							targets[0] = TreeObj.transform.position;
-							print ("Found Tree");
-							targets [1] = transform.position;
 
-						}
+				if(i == targets.Count-1){
+					i=0;
+					TreeObj = GameObject.FindWithTag ("tree");
+					if(TreeObj!=null){	
+						targets.Add(TreeObj.transform.position);
+						print ("Found Tree");
+						targets.Add(transform.position);
+					}
 					else
+						targets.Clear();
+
+				}
+				else
 						i++;
 
-					CollectTimer=0;
-					}
+				if(i==1){
+					DestroyParentGameObject TreeObjScript=TreeObj.GetComponent<DestroyParentGameObject>();
+					TreeObjScript.DestroyObj();
 				}
 
+				CollectTimer=0;
+			}
 
 
-			//next destination
-			agent.destination=targets[i];
+
+			if( targets.Count>0){
+					//next destination
+					agent.destination=targets[i];
+			}
+
 		}
 	}
 
@@ -64,9 +78,8 @@ public class MoveThroughSequence : MonoBehaviour
 		//Generate test movement points and put a marker 4 units above each point.
 		int testRadius = 15;
 		int testPoints = 5;
-		targets = new Vector3[testPoints];
 		for (int a=0; a<testPoints; a++) {
-			targets[a]=new Vector3 (testRadius * Mathf.Cos(2*a * Mathf.PI /testPoints),0,testRadius * Mathf.Sin(2*a * Mathf.PI /testPoints));
+			targets.Add(new Vector3 (testRadius * Mathf.Cos(2*a * Mathf.PI /testPoints),0,testRadius * Mathf.Sin(2*a * Mathf.PI /testPoints)));
 			Instantiate (marker, targets[a] + new Vector3(0,4,0), Quaternion.identity);
 		}
 		agent.destination = targets [i];
