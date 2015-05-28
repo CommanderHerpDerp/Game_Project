@@ -4,27 +4,23 @@ using System.Collections.Generic;
 
 public class MoveThroughSequence : MonoBehaviour
 {
-	List<Vector3> targets;
-	NavMeshAgent agent;
-	int i=0;
-	public Transform marker;
+	private List<Vector3> targets;
+	private NavMeshAgent agent;
+	private int i=0;
+//	public Transform marker;
 	public float CollectTime =5;
 	private float CollectTimer;
 	private GameObject TreeObj;
+	private Vector3 HomePosition;
 
 
 	// Use this for initialization
 	void Start () {
+		HomePosition = transform.position;
 		agent = GetComponent<NavMeshAgent>();
 		targets = new List<Vector3> ();
-		TreeObj = GameObject.FindWithTag ("tree");
-		if (TreeObj != null) {
-			targets.Add(TreeObj.transform.position);
-			print ("Found Tree");
-			targets.Add(transform.position);
-			agent.destination=targets[0];
-			TreeObj.tag = "tree.tagged";
-		}
+		targets.Add (HomePosition);
+		agent.destination = HomePosition;
 	}
 	
 	// Update is called once per frame
@@ -35,41 +31,64 @@ public class MoveThroughSequence : MonoBehaviour
 
 			CollectTimer += Time.deltaTime;
 			if (CollectTimer >= CollectTime){
-
-				if(i == targets.Count-1){
-					i=0;
-					TreeObj = GameObject.FindWithTag ("tree");
-					if(TreeObj!=null){	
-						targets.Add(TreeObj.transform.position);
-						print ("Found Tree");
-						targets.Add(transform.position);
+				if(targets.Count!=0){
+					if(i==0){
+						SetTargetsForTree();
 					}
+					if(i==1){
+						DestroyParentGameObject TreeObjScript=TreeObj.GetComponent<DestroyParentGameObject>();
+						TreeObjScript.DestroyObj();
+					}
+
+					if(i == targets.Count-1)
+						i=0;
 					else
-						targets.Clear();
-
-				}
-				else
 						i++;
+				
+					CollectTimer=0;
 
-				if(i==1){
-					DestroyParentGameObject TreeObjScript=TreeObj.GetComponent<DestroyParentGameObject>();
-					TreeObjScript.DestroyObj();
-				}
-
-				CollectTimer=0;
-			}
-
-
-
-			if( targets.Count>0){
 					//next destination
 					agent.destination=targets[i];
+				}
 			}
 
 		}
 	}
 
+	void SetTargetsForTree(){
+		TreeObj = FindNearestTree(50);
+		if(TreeObj!=null){	
+			TreeObj.tag = "tree.tagged";
+			print (TreeObj.name);
+			targets.Clear();
+			targets.Add(HomePosition);
+			targets.Add(TreeObj.transform.position);
+		}
+		else
+		{
+			targets.Clear();
+			targets.Add (HomePosition);
+		}
+	}
 
+	GameObject FindNearestTree(float radius){
+		GameObject currentBest=null;
+		float currentDist=radius+1;
+		Collider[] colliders = Physics.OverlapSphere (transform.position, radius);
+		foreach (Collider collider in colliders)
+		{
+			if(collider.gameObject.CompareTag("tree")){
+				if (Vector3.Distance( collider.gameObject.transform.position,HomePosition)< currentDist){
+					currentBest=collider.gameObject;
+					currentDist=Vector3.Distance( collider.gameObject.transform.position,HomePosition);
+
+				}
+			}
+		
+		}
+		print (currentDist);
+		return currentBest;
+}
 
 
 
@@ -80,10 +99,10 @@ public class MoveThroughSequence : MonoBehaviour
 		int testPoints = 5;
 		for (int a=0; a<testPoints; a++) {
 			targets.Add(new Vector3 (testRadius * Mathf.Cos(2*a * Mathf.PI /testPoints),0,testRadius * Mathf.Sin(2*a * Mathf.PI /testPoints)));
-			Instantiate (marker, targets[a] + new Vector3(0,4,0), Quaternion.identity);
+//			Instantiate (marker, targets[a] + new Vector3(0,4,0), Quaternion.identity);
 		}
 		agent.destination = targets [i];
-}
+	}
 }
 
 

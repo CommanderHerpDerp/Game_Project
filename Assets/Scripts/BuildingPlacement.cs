@@ -33,7 +33,9 @@ public class BuildingPlacement : MonoBehaviour {
 			
 				if (Input.GetMouseButtonDown (0)) {
 					if (IsLegalPosition ()) {
-						currentBuilding.GetComponent<SpawnWC>().SpawnWorker();
+						if(currentBuilding.GetComponent<SpawnWorker>()!=null){
+							currentBuilding.GetComponent<SpawnWorker>().Spawn();
+						}
 						hasPlaced = true;	
 					}
 				}

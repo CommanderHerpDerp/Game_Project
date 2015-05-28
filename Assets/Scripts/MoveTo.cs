@@ -2,7 +2,7 @@
 using UnityEngine;
 
 public class MoveTo : MonoBehaviour {
-	NavMeshAgent agent;
+	private NavMeshAgent agent;
 	
 	void Start() {
 		agent = GetComponent<NavMeshAgent>();
