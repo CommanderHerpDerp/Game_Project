@@ -28,20 +28,23 @@ public class MoveThroughSequence : MonoBehaviour
 
 			CollectTimer += Time.deltaTime;
 			if (CollectTimer >= CollectTime){
-				DestroyParentGameObject TreeObjScript=GameObject.Find("tree").GetComponent<DestroyParentGameObject>();
-				TreeObjScript.DestroyObj();
+				GameObject TreeObj = GameObject.Find("tree");
+				if(TreeObj!=null){
+					DestroyParentGameObject TreeObjScript=TreeObj.GetComponent<DestroyParentGameObject>();
+					TreeObjScript.DestroyObj();
 
-			if(i == targets.Length-1){
-				i=0;
-					targets[0] = GameObject.Find("tree").transform.position;
-					print ("Found Tree");
-					targets [1] = transform.position;
+					if(i == targets.Length-1){
+						i=0;
+							targets[0] = TreeObj.transform.position;
+							print ("Found Tree");
+							targets [1] = transform.position;
 
+						}
+					else
+						i++;
+
+					CollectTimer=0;
 				}
-			else
-				i++;
-
-			CollectTimer=0;
 			}
 
 
