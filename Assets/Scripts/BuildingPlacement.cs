@@ -17,7 +17,7 @@ public class BuildingPlacement : MonoBehaviour {
 	
 	private PlaceableBuilding placeableBuildingOld;
 	void Start(){
-		terrainMask = ~(1 << 2 | 1 << 8 | 1 << 9);
+		terrainMask = ~(1 << 2 | 1 << 8 | 1 << 9 | 1 <<10);
 
 
 	}
