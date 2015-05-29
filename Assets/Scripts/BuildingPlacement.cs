@@ -9,11 +9,12 @@ public class BuildingPlacement : MonoBehaviour {
 	private Transform currentBuilding;
 	private bool hasPlaced;
 	private RaycastHit hit;
-	public Camera camera2;
-
-	
+    public Camera camera2; 
 	public LayerMask buildingsMask;
 	private LayerMask terrainMask;
+    private Color startingColor;
+    private Color transpColor;
+    private Color invalidColor;
 	
 	private PlaceableBuilding placeableBuildingOld;
 	void Start(){
@@ -30,12 +31,19 @@ public class BuildingPlacement : MonoBehaviour {
 			if (currentBuilding != null && !hasPlaced) {
 			
 				currentBuilding.position = hit.point;
+                if (IsLegalPosition())
+                    currentBuilding.GetComponent<Renderer>().material.color = transpColor;
+                else
+                    currentBuilding.GetComponent<Renderer>().material.color = invalidColor;
 			
 				if (Input.GetMouseButtonDown (0)) {
 					if (IsLegalPosition ()) {
 						if(currentBuilding.GetComponent<SpawnWorker>()!=null){
 							currentBuilding.GetComponent<SpawnWorker>().Spawn();
 						}
+
+                        currentBuilding.GetComponent<Renderer>().material.color = startingColor;
+                        currentBuilding.GetComponent<NavMeshObstacle>().enabled = true;
 						hasPlaced = true;	
 					}
 				}
@@ -68,6 +76,15 @@ public class BuildingPlacement : MonoBehaviour {
 	public void SetItem(GameObject b) {
 		hasPlaced = false;
 		currentBuilding = ((GameObject)Instantiate(b)).transform;
+        startingColor = currentBuilding.GetComponent<Renderer>().material.color;
+        transpColor = startingColor;
+        transpColor.a=.7f;
+        invalidColor=transpColor;
+        invalidColor.r = invalidColor.r * 1.2f;
+        invalidColor.g = invalidColor.g * .8f;
+        invalidColor.b = invalidColor.b * .8f;
+        currentBuilding.GetComponent<Renderer>().material.color = transpColor;
+        currentBuilding.GetComponent<NavMeshObstacle>().enabled = false;
 		placeableBuilding = currentBuilding.GetComponent<PlaceableBuilding>();
 	}
 }
