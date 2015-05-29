@@ -18,7 +18,14 @@ public class BuildingManager : MonoBehaviour {
 	
 	void OnGUI() {
 		for (int i = 0; i <buildings.Length; i ++) {
-			if (GUI.Button(new Rect(Screen.width/20,Screen.height/15 + Screen.height/12 * i,100,30), buildings[i].name)) {
+			string butname;
+			PlaceableBuilding buildingscript = buildings[i].GetComponent<PlaceableBuilding>();
+			if (buildingscript.title=="")
+				butname = buildings[i].name;
+			else
+				butname = buildingscript.title;
+			 
+			if (GUI.Button(new Rect(Screen.width/20,Screen.height/15 + Screen.height/12 * i,100,30), butname)) {
 				buildingPlacement.SetItem(buildings[i]);
 			}
 		}

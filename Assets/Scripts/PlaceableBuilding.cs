@@ -7,12 +7,15 @@ public class PlaceableBuilding : MonoBehaviour {
 	[HideInInspector]
 	public List<Collider> colliders = new List<Collider>();
 	private bool isSelected;
+	public string title;
 	public string bName;
 
 	void OnGUI() {
 		if (isSelected) {
-			GUI.Button(new Rect(Screen.width /2, Screen.height / 20, 100, 30), bName);	
-			
+			GUI.Button(new Rect(Screen.width /2, Screen.height / 20, 100, 30), bName);
+			if (bName =="") {
+				GUI.Button(new Rect(Screen.width /2, Screen.height / 20, 100, 30),name);
+			}
 		}
 		
 	}
