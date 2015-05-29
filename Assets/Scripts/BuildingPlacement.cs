@@ -32,9 +32,9 @@ public class BuildingPlacement : MonoBehaviour {
 			
 				currentBuilding.position = hit.point;
                 if (IsLegalPosition())
-                    currentBuilding.GetComponent<Renderer>().material.color = transpColor;
+					currentBuilding.GetComponentInChildren<Renderer>().material.color = transpColor;
                 else
-                    currentBuilding.GetComponent<Renderer>().material.color = invalidColor;
+					currentBuilding.GetComponentInChildren<Renderer>().material.color = invalidColor;
 			
 				if (Input.GetMouseButtonDown (0)) {
 					if (IsLegalPosition ()) {
@@ -42,7 +42,7 @@ public class BuildingPlacement : MonoBehaviour {
 							currentBuilding.GetComponent<SpawnWorker>().Spawn();
 						}
 
-                        currentBuilding.GetComponent<Renderer>().material.color = startingColor;
+                        currentBuilding.GetComponentInChildren<Renderer>().material.color = startingColor;
                         currentBuilding.GetComponent<NavMeshObstacle>().enabled = true;
 						hasPlaced = true;	
 					}
@@ -76,14 +76,14 @@ public class BuildingPlacement : MonoBehaviour {
 	public void SetItem(GameObject b) {
 		hasPlaced = false;
 		currentBuilding = ((GameObject)Instantiate(b)).transform;
-        startingColor = currentBuilding.GetComponent<Renderer>().material.color;
+		startingColor = currentBuilding.GetComponentInChildren<Renderer>().material.color;
         transpColor = startingColor;
         transpColor.a=.7f;
         invalidColor=transpColor;
         invalidColor.r = invalidColor.r * 1.2f;
         invalidColor.g = invalidColor.g * .8f;
         invalidColor.b = invalidColor.b * .8f;
-        currentBuilding.GetComponent<Renderer>().material.color = transpColor;
+		currentBuilding.GetComponentInChildren<Renderer>().material.color = transpColor;
         currentBuilding.GetComponent<NavMeshObstacle>().enabled = false;
 		placeableBuilding = currentBuilding.GetComponent<PlaceableBuilding>();
 	}
