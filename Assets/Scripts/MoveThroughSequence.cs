@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -12,6 +12,7 @@ public class MoveThroughSequence : MonoBehaviour
 	private float CollectTimer;
 	private GameObject TreeObj;
 	private Vector3 HomePosition;
+	private bool HadFirstUpdate;
 
 
 	// Use this for initialization
@@ -21,10 +22,22 @@ public class MoveThroughSequence : MonoBehaviour
 		targets = new List<Vector3> ();
 		targets.Add (HomePosition);
 		agent.destination = HomePosition;
+
+		//hack to stop derpy moving on spawn
+		HadFirstUpdate = false;
 	}
-	
+
 	// Update is called once per frame
 	void Update () {
+		//hack to stop derpy moving on spawn
+		if (!HadFirstUpdate) {
+			if (Vector3.Distance(transform.position,HomePosition)>2){
+				print ("Fixed Derp");
+			}
+			HadFirstUpdate = true;
+			transform.position = HomePosition;
+		}
+
 		//check if at next point
 		if (agent.remainingDistance < agent.stoppingDistance) {
 			//move to next point or back to first if at the last point
@@ -74,19 +87,18 @@ public class MoveThroughSequence : MonoBehaviour
 	GameObject FindNearestTree(float radius){
 		GameObject currentBest=null;
 		float currentDist=radius+1;
-		Collider[] colliders = Physics.OverlapSphere (transform.position, radius);
-		foreach (Collider collider in colliders)
+		Collider[] treecolliders = Physics.OverlapSphere (transform.position, radius);
+		foreach (Collider treecollider in treecolliders)
 		{
-			if(collider.gameObject.CompareTag("tree")){
-				if (Vector3.Distance( collider.gameObject.transform.position,HomePosition)< currentDist){
-					currentBest=collider.gameObject;
-					currentDist=Vector3.Distance( collider.gameObject.transform.position,HomePosition);
+			if(treecollider.gameObject.CompareTag("tree")){
+				if (Vector3.Distance( treecollider.gameObject.transform.position,HomePosition)< currentDist){
+					currentBest=treecollider.gameObject;
+					currentDist=Vector3.Distance( GetComponent<Collider>().gameObject.transform.position,HomePosition);
 
 				}
 			}
 		
 		}
-		print (currentDist);
 		return currentBest;
 }
 
