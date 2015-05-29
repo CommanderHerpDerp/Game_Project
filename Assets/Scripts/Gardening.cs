@@ -11,6 +11,7 @@ public class Gardening : MonoBehaviour {
 		public float CollectTime =5;
 		private float CollectTimer;
 		public GameObject Tree;
+		
 		public class Forest
 	{
 		public Vector3 cornerA;
@@ -41,6 +42,7 @@ public class Gardening : MonoBehaviour {
 		agent = GetComponent<NavMeshAgent>();
 		agent.destination = Homeposition;
 		orders = new List<Vector3> ();
+		orders.Add (Homeposition);
 		saplings = new List<Sapling> ();
 		saplings.Add(new Sapling(new Vector3 (9,0,9),false));
 		saplings.Add(new Sapling(new Vector3 (9,0,18),false));
@@ -50,18 +52,7 @@ public class Gardening : MonoBehaviour {
 		saplings.Add(new Sapling(new Vector3 (18,0,27),false));
 		saplings.Add(new Sapling(new Vector3 (27,0,9),false));
 		saplings.Add(new Sapling(new Vector3 (27,0,18),false));
-		saplings.Add(new Sapling(new Vector3 (27,0,27),false));
-	
-			foreach(Sapling sap in saplings){
-			if (!sap.planned){
-				orders.Add(sap.position);
-				sap.planned=true;
-
-			}
-				
-
-		}
-		                           
+		saplings.Add(new Sapling(new Vector3 (27,0,27),false));	                      
 	}
 	// Update is called once per frame
 	void Update () {
