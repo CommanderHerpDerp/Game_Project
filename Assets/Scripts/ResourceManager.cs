@@ -28,7 +28,7 @@ public class ResourceManager : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		resources.Add(new resource("Wood",woodIcon,64,false,true));
+		resources.Add(new resource("Wood","Wood",woodIcon,64,false,true));
 	}
 	
 	// Update is called once per frame

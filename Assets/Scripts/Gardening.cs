@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class Gardening2 : MonoBehaviour {
+public class Gardening : MonoBehaviour {
 	private NavMeshAgent agent;
 	private List<Vector3> orders;
 	private Vector3 Homeposition;
@@ -10,7 +10,7 @@ public class Gardening2 : MonoBehaviour {
 	private int i=0;
 	public float CollectTime =5;
 	private float CollectTimer;
-	public GameObject Tree;
+	public GameObject Saplet;
 	public GameObject marker;
 	private Forest forest;
 	
@@ -54,11 +54,9 @@ public class Gardening2 : MonoBehaviour {
 		Vector3 widthUnitVector = Vector3.Normalize (Vector3.Cross (forest.cornerB - forest.cornerA + new Vector3 (0, 1, 0), forest.cornerB - forest.cornerA));
 		for (int a=0; a<width; a++) {
 			for (int b=0; b<length; b++) {
-				saplings.Add (new Sapling (forest.cornerA + b * lengthUnitVector * 3 + a * widthUnitVector * 3, false));
+				saplings.Add (new Sapling (forest.cornerA + b * lengthUnitVector * 3 + a * widthUnitVector * 5, false));
 			}
 		}
-	}
-		
 		GameObject c1 = Instantiate(marker) as GameObject;
 		GameObject c2 = Instantiate(marker) as GameObject;
 		GameObject c3 = Instantiate(marker) as GameObject;
@@ -80,7 +78,7 @@ public class Gardening2 : MonoBehaviour {
 						SetOrdersForSaplings();
 					}
 					if(i>=1){
-						GameObject newTree = Instantiate (Resources.Load (Tree.name)) as GameObject;
+						GameObject newTree = Instantiate (Resources.Load (Saplet.name)) as GameObject;
 						newTree.transform.position=orders[i];
 					}
 					
