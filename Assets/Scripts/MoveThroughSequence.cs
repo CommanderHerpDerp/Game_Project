@@ -88,12 +88,12 @@ public class MoveThroughSequence : MonoBehaviour
 		GameObject currentBest=null;
 		float currentDist=radius+1;
 		Collider[] treecolliders = Physics.OverlapSphere (transform.position, radius);
-		foreach (Collider treecollider in treecolliders)
+		foreach (Collider treeCollider in treecolliders)
 		{
-			if(treecollider.gameObject.CompareTag("tree")){
-				if (Vector3.Distance( treecollider.gameObject.transform.position,HomePosition)< currentDist){
-					currentBest=treecollider.gameObject;
-					currentDist=Vector3.Distance( GetComponent<Collider>().gameObject.transform.position,HomePosition);
+			if(treeCollider.gameObject.CompareTag("tree")){
+				if (Vector3.Distance( treeCollider.gameObject.transform.position,HomePosition)< currentDist){
+					currentBest=treeCollider.gameObject;
+					currentDist=Vector3.Distance( treeCollider.gameObject.transform.position,HomePosition);
 
 				}
 			}

@@ -45,7 +45,7 @@ public class Gardening2 : MonoBehaviour {
 		agent.destination = Homeposition;
 		orders = new List<Vector3> ();
 		orders.Add (Homeposition);
-		forest = new Forest (new Vector3 (20, 0, 20), new Vector3 (20, 0, 48), 20);
+		forest = new Forest (new Vector3 (20, 0, 20), new Vector3 (30, 0, 27), 20);
 		saplings = new List<Sapling> ();
 		int length = Mathf.CeilToInt(Vector3.Distance (forest.cornerA, forest.cornerB)/3);
 		int width = Mathf.CeilToInt (forest.Width / 3);
@@ -53,7 +53,7 @@ public class Gardening2 : MonoBehaviour {
 		Vector3 widthUnitVector = Vector3.Normalize (Vector3.Cross (forest.cornerB - forest.cornerA + new Vector3 (0, 1, 0), forest.cornerB - forest.cornerA));
 		for(int a=0;a<width;a++){
 			for(int b=0;b<length;b++){
-				saplings.Add(new Sapling(forest.cornerA+b*lengthUnitVector+a*widthUnitVector,false));
+				saplings.Add(new Sapling(forest.cornerA+b*lengthUnitVector*3+a*widthUnitVector*3,false));
 			}
 		}
 
