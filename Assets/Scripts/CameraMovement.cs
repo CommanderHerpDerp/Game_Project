@@ -9,7 +9,7 @@ public class CameraMovement : MonoBehaviour
 	private const int DragSpeed = 100;
 	
 	private const int ZoomSpeed = 25;
-	private const int ZoomMin = 25;
+	private const int ZoomMin = 1;
 	private const int ZoomMax = 1000;
 	
 	private const int PanSpeed = 50;
