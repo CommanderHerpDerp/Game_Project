@@ -11,6 +11,8 @@ public class Stalker : MonoBehaviour {
 	private GameObject currentAnimal;
 	private int i=0;
 	private bool hadFirstUpdate;
+	private bool AnimalClose;
+	private float AnimalNear;
 
 	// Use this for initialization
 	void Start () {
@@ -35,14 +37,20 @@ public class Stalker : MonoBehaviour {
 		//check if at next point
 		if (agent.remainingDistance < agent.stoppingDistance) {
 			//move to next point or back to first if at the last point
-
 			hungerClock += Time.deltaTime;
+
+
+			if (AnimalNear >= 2)
+				AnimalClose = true;
+			else 
+				AnimalClose = false;
+
 			if (hungerClock >= hungerTime) {
 				if (orders.Count != 0) {
 					if (i == 0) {
 						FindAnimalToKill ();
 					}
-					if (i == 1) {
+					if (i == 1 && (AnimalClose==true)) {
 						DestroyParentGameObject huntScript = currentAnimal.GetComponent<DestroyParentGameObject> ();
 						huntScript.DestroyObj ();
 					}
@@ -68,6 +76,7 @@ public class Stalker : MonoBehaviour {
 			orders.Clear();
 			orders.Add(homePosition);
 			orders.Add(currentAnimal.transform.position);
+			AnimalNear = Vector3.Distance (agent.transform.position, currentAnimal.transform.position);
 		}
 		else
 		{
@@ -85,7 +94,7 @@ public class Stalker : MonoBehaviour {
 					if (Vector3.Distance( animalCollider.gameObject.transform.position,transform.position)< currentDist){
 						currentAnimal=animalCollider.gameObject;
 						currentDist=Vector3.Distance( animalCollider.gameObject.transform.position,transform.position);
-						
+												
 					}
 			}
 			
