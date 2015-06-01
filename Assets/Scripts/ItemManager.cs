@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class ResourceManager : MonoBehaviour {
-	public class resource{
+	public class item{
 		public string name;
 		public string friendlyName;
 		public Texture2D icon;
@@ -11,7 +11,7 @@ public class ResourceManager : MonoBehaviour {
 		public bool isSmeltable;
 		public bool isFuel;
 
-		public resource(string name,string friendlyName, Texture2D icon,int maxStackSize, bool isSmeltable, bool isFuel){
+		public item(string name,string friendlyName, Texture2D icon,int maxStackSize, bool isSmeltable, bool isFuel){
 			this.name = name;
 			this.friendlyName = friendlyName;
 			this.icon = icon;
@@ -20,7 +20,10 @@ public class ResourceManager : MonoBehaviour {
 			this.isFuel = isFuel;
 		}
 	}
-	public static List<resource> resources = new List<resource>();
+	private void ItemsAdd(string nameid, string friendlyName, Texture2D icon, int maxStackSize, bool isSmeltable, bool isFuel){
+		items.Add (nameid,new item(nameid,friendlyName,icon,maxStackSize,isSmeltable,isFuel));
+	}
+	public static Dictionary<string,item> items = new Dictionary<string,item>();
 	[SerializeField]
 	private Texture2D woodIcon=null;
 
@@ -28,7 +31,8 @@ public class ResourceManager : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		resources.Add(new resource("Wood","Wood",woodIcon,64,false,true));
+		ItemsAdd("Wood","Wood",woodIcon,64,false,true);
+		
 	}
 	
 	// Update is called once per frame
