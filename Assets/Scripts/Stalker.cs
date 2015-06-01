@@ -25,22 +25,14 @@ public class Stalker : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		//hack to stop derpy moving on spawn
-		if (!hadFirstUpdate) {
-			if (Vector3.Distance (transform.position, homePosition) > 2) {
-				print ("Fixed Derp");
-			}
-			hadFirstUpdate = true;
-			transform.position = homePosition;
-		}
-		
+				
 		//check if at next point
 		if (agent.remainingDistance < agent.stoppingDistance) {
 			//move to next point or back to first if at the last point
 			hungerClock += Time.deltaTime;
 
 
-			if (AnimalNear >= 2)
+			if (AnimalNear <= 15)
 				AnimalClose = true;
 			else 
 				AnimalClose = false;
@@ -50,7 +42,8 @@ public class Stalker : MonoBehaviour {
 					if (i == 0) {
 						FindAnimalToKill ();
 					}
-					if (i == 1 && (AnimalClose==true)) {
+					if (i == 1 &&AnimalClose) {
+						orders.Add (currentAnimal.transform.position);
 						DestroyParentGameObject huntScript = currentAnimal.GetComponent<DestroyParentGameObject> ();
 						huntScript.DestroyObj ();
 					}
@@ -74,14 +67,16 @@ public class Stalker : MonoBehaviour {
 			currentAnimal.tag = "Animal.tagged";
 			print (currentAnimal.name);
 			orders.Clear();
-			orders.Add(homePosition);
+			//orders.Add(homePosition);
 			orders.Add(currentAnimal.transform.position);
+			agent.speed=7f;
 			AnimalNear = Vector3.Distance (agent.transform.position, currentAnimal.transform.position);
 		}
 		else
 		{
 			orders.Clear();
-			orders.Add (homePosition);
+			//orders.Add (homePosition);
+			agent.speed=3.5f;
 		}
 	}
 	GameObject FindNearestAnimal(float radius){
