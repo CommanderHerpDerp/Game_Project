@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class ResourceManager : MonoBehaviour {
+public class ItemManager : MonoBehaviour {
 	public class item{
 		public string name;
 		public string friendlyName;
@@ -20,10 +20,20 @@ public class ResourceManager : MonoBehaviour {
 			this.isFuel = isFuel;
 		}
 	}
+
+	
+	public static Dictionary<string,item> items = new Dictionary<string,item>();
+
 	private void ItemsAdd(string nameid, string friendlyName, Texture2D icon, int maxStackSize, bool isSmeltable, bool isFuel){
 		items.Add (nameid,new item(nameid,friendlyName,icon,maxStackSize,isSmeltable,isFuel));
 	}
-	public static Dictionary<string,item> items = new Dictionary<string,item>();
+
+	public item GetItemByKey(string key){
+		return items[key];
+	}
+
+
+
 	[SerializeField]
 	private Texture2D woodIcon=null;
 
