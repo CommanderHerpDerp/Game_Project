@@ -25,7 +25,8 @@ void Update () {
 
 		if (currentAnimal == null)
 			FindAnimalToKill ();
-	
+	//this is too much variable setting being done inside void update. only do this on a timer like it is from line 40 onwards so it doesnt run every update.
+	//distance calculations are computationaly expensive and should be run more sparingly, once a second would be ok! You can create another timer like distanceCheckTimer.
 		if (currentAnimal) {
 			animalDistance = Vector3.Distance (agent.transform.position, currentAnimal.transform.position);
 
