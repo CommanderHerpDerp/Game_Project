@@ -5,78 +5,62 @@ using System.Collections.Generic;
 public class Stalker : MonoBehaviour {
 	private NavMeshAgent agent;
 	private List<Vector3> orders;
-	private Vector3 homePosition;
-	private float hungerTime=5;
+	public float hungerTime=15;
 	private float hungerClock;
 	private GameObject currentAnimal;
-	private int i=0;
-	private bool hadFirstUpdate;
-	private bool animalClose;
 	private float animalDistance;
+	public Material changeMaterial1;
+	public Material changeMaterial2;
+	public Renderer rend;
 
-	// Use this for initialization
 	void Start () {
-		homePosition = transform.position;
 		agent = GetComponent<NavMeshAgent> ();
-		orders = new List<Vector3> ();
 		FindAnimalToKill ();
-		agent.destination = orders[0];
-	}
+		}
 	
-	// Update is called once per frame
-	void Update () {
-				
-		//check if at next point
-		if (agent.remainingDistance < agent.stoppingDistance) {
-			//move to next point or back to first if at the last point
-			hungerClock += Time.deltaTime;
 
+void Update () {
 
+		hungerClock += Time.deltaTime;
+
+		if (currentAnimal == null)
+			FindAnimalToKill ();
+	
+		if (currentAnimal) {
+			animalDistance = Vector3.Distance (agent.transform.position, currentAnimal.transform.position);
+
+			if (animalDistance > 15) {
+				agent.speed = 3.5f;
+				this.rend.material = changeMaterial1;
+			}
 		
 
-			if (hungerClock >= hungerTime) {
-				if(currentAnimal==null)
-					FindAnimalToKill();
-				if (orders.Count != 0) {
-					if (i == 0) {
-						animalDistance = Vector3.Distance (agent.transform.position, currentAnimal.transform.position);
-						if (animalDistance<2){
-							DestroyParentGameObject animalScript = currentAnimal.GetComponent<DestroyParentGameObject> ();
-							animalScript.DestroyObj ();
-						}
-					}
-				
-					if (i == orders.Count - 1)
-						i = 0;
-					else
-						i++;
-				
+		}
+		if (hungerClock >= hungerTime) {
+			agent.destination = currentAnimal.transform.position;
 
-					//next destination
-					hungerClock = 0;
-					agent.destination = orders [i];
-				}
-				FindAnimalToKill();
+			if (animalDistance <= 15) {
+				agent.speed = 7f;
+				this.rend.material = changeMaterial2;
+			}
+
+			if (animalDistance < 2) {
+				DestroyParentGameObject animalScript = currentAnimal.GetComponent<DestroyParentGameObject> ();
+				animalScript.DestroyObj ();
+				hungerClock = 0;
 			}
 		}
 	}
-		void FindAnimalToKill(){
+
+	void FindAnimalToKill(){
 		currentAnimal = FindNearestAnimal(250);
 		if(currentAnimal!=null){	
-			//currentAnimal.tag = "Animal.tagged";
+			//orders.Clear();
+			//agent.destination = currentAnimal.transform.position;
 			print (currentAnimal.name);
-			orders.Clear();
-			//orders.Add(homePosition);
-			orders.Add(currentAnimal.transform.position);
-			agent.speed=7f;
+			}
 		}
-		else
-		{
-			orders.Clear();
-			//orders.Add (homePosition);
-			agent.speed=3.5f;
-		}
-	}
+
 	GameObject FindNearestAnimal(float radius){
 		GameObject currentAnimal=null;
 		float currentDist=radius+1;
@@ -87,8 +71,7 @@ public class Stalker : MonoBehaviour {
 					if (Vector3.Distance( animalCollider.gameObject.transform.position,transform.position)< currentDist){
 						currentAnimal=animalCollider.gameObject;
 						currentDist=Vector3.Distance( animalCollider.gameObject.transform.position,transform.position);
-												
-					}
+						}
 			}
 			
 		}
