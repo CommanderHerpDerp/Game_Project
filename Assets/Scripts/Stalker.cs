@@ -11,16 +11,16 @@ public class Stalker : MonoBehaviour {
 	private GameObject currentAnimal;
 	private int i=0;
 	private bool hadFirstUpdate;
-	private bool AnimalClose;
-	private float AnimalNear;
+	private bool animalClose;
+	private float animalDistance;
 
 	// Use this for initialization
 	void Start () {
 		homePosition = transform.position;
 		agent = GetComponent<NavMeshAgent> ();
-		agent.destination = homePosition;
 		orders = new List<Vector3> ();
-		orders.Add (homePosition);
+		FindAnimalToKill ();
+		agent.destination = orders[0];
 	}
 	
 	// Update is called once per frame
@@ -32,20 +32,18 @@ public class Stalker : MonoBehaviour {
 			hungerClock += Time.deltaTime;
 
 
-			if (AnimalNear <= 15)
-				AnimalClose = true;
-			else 
-				AnimalClose = false;
+		
 
 			if (hungerClock >= hungerTime) {
+				if(currentAnimal==null)
+					FindAnimalToKill();
 				if (orders.Count != 0) {
 					if (i == 0) {
-						FindAnimalToKill ();
-					}
-					if (i == 1 &&AnimalClose) {
-						orders.Add (currentAnimal.transform.position);
-						DestroyParentGameObject huntScript = currentAnimal.GetComponent<DestroyParentGameObject> ();
-						huntScript.DestroyObj ();
+						animalDistance = Vector3.Distance (agent.transform.position, currentAnimal.transform.position);
+						if (animalDistance<2){
+							DestroyParentGameObject animalScript = currentAnimal.GetComponent<DestroyParentGameObject> ();
+							animalScript.DestroyObj ();
+						}
 					}
 				
 					if (i == orders.Count - 1)
@@ -58,19 +56,19 @@ public class Stalker : MonoBehaviour {
 					hungerClock = 0;
 					agent.destination = orders [i];
 				}
+				FindAnimalToKill();
 			}
 		}
 	}
 		void FindAnimalToKill(){
 		currentAnimal = FindNearestAnimal(250);
 		if(currentAnimal!=null){	
-			currentAnimal.tag = "Animal.tagged";
+			//currentAnimal.tag = "Animal.tagged";
 			print (currentAnimal.name);
 			orders.Clear();
 			//orders.Add(homePosition);
 			orders.Add(currentAnimal.transform.position);
 			agent.speed=7f;
-			AnimalNear = Vector3.Distance (agent.transform.position, currentAnimal.transform.position);
 		}
 		else
 		{
