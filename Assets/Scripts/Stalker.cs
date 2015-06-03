@@ -131,11 +131,12 @@ void Update () {
 					currentHuman = humanCollider.gameObject;
 					currentHumanPos = humanCollider.gameObject.transform.position;
 					currentHumanDist = Vector3.Distance (currentHuman.transform.position, transform.position);
-					humansL.Add (new humans(currentHuman,currentHumanPos,currentHumanDist));
+//					humansL.Add (new humans(currentHuman,currentHumanPos,currentHumanDist));
 				}
 			}
 
 		}
-		return humansL;
+		return null;
+//		return humansL;
 		}
 }
