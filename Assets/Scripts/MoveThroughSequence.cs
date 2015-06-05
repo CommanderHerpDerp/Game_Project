@@ -49,8 +49,7 @@ public class MoveThroughSequence : MonoBehaviour
 						SetTargetsForTree();
 					}
 					if(i==1){
-						DestroyParentGameObject TreeObjScript=TreeObj.GetComponent<DestroyParentGameObject>();
-						TreeObjScript.DestroyObj();
+						Destroy (TreeObj);
 					}
 
 					if(i == targets.Count-1)

@@ -1,21 +1,32 @@
 ﻿using UnityEngine;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 
 public class Stalker : MonoBehaviour {
 	private NavMeshAgent agent;
-	public class humans
+	public class humans : IComparable<humans>
 	{
-		public List<GameObject>humanTargets;
-		public List<Vector3> humanTargetsPos;
-		public float humanTargetsDist;
-		public humans(List<GameObject> humanTs,List<Vector3> humanPs, float humanDs){
-			humanTargets=humanTs;
-			humanTargetsPos=humanPs;
-			humanTargetsDist=humanDs;
-			}
+		public GameObject humanTarget;
+		public float humanTargetDist;
+		public humans(GameObject humanTs, float humanDs){
+			humanTarget=humanTs;
+			humanTargetDist=humanDs;
+		}
+		public int CompareTo(humans other)
+		{
+			if(other == null)
+			return 1;
+
+			if(this.humanTargetDist> other.humanTargetDist)
+			   return 1;
+
+			if (this.humanTargetDist < other.humanTargetDist)
+				return -1;
+			else
+				return 0;
+		}
 	}
-	public List<humans> humansL;
 	public float hungerTime=15;
 	private float hungerClock;
 	private float distClock;
@@ -62,22 +73,14 @@ void Update () {
 			}
 
 			if (animalDistance < 2) {
-				DestroyParentGameObject animalScript = currentAnimal.GetComponent<DestroyParentGameObject> ();
-				animalScript.DestroyObj ();
+				Destroy (currentAnimal);
 				hungerClock = 0;
 			}
 		}
-		if (hungerClock > (hungerTime*10)) {
-			Rampage();
-			//float humanDistance = Vector3.Distance (agent.transform.position,humansL);
-
-		//	if (humanDistance < 2){
-				//DestroyParentGameObject humanScript = humanTarget.GetComponent<DestroyParentGameObject> ();
-		//		humanScript.DestroyObj ();
-		//		hungerClock = 0;
-		//	}
+		if (hungerClock > 30) {
+			Rampage(FindHumans());
 		}
-	}
+}
 
 	void FindAnimalToKill(){
 		currentAnimal = FindNearestAnimal(250);
@@ -102,41 +105,46 @@ void Update () {
 		return currentAnimal;
 	}
 
-	void Rampage (){
+	void Rampage (List<humans> humansL){
 		if (humansL.Count != 0) {
-			this.rend.material=changeMaterial3;
-			agent.speed=7f;
-			if (i == 0) {
+			float humanDist = (Vector3.Distance (humansL [i].humanTarget.transform.position, transform.position));
+			this.rend.material = changeMaterial3;
+			agent.speed = 7f;
+			float distRefresh = 5;
+			distClock += Time.deltaTime;
 
+			if (humanDist >= 2 && (distClock > distRefresh)) {
+				agent.destination = humansL [i].humanTarget.transform.position;
+				distClock=0;
+				}
+
+				if (humanDist < 2) {
+				Destroy (humansL[i].humanTarget);
+				if(i == humansL.Count-1)
+					i=0;
+				else
+					i++;
+				}
+				
 			}
-
-			if (i == humansL.Count - 1)
-				i = 0;
-			else
-				i++;
-		//	agent.destination = humanTargetsPos [i];
 		}
-	}
 
-	List<Vector3> FindHumans(){
+	List<humans> FindHumans(){
 		GameObject currentHuman;
-		Vector3 currentHumanPos;
 		float currentHumanDist;
-		humansL = new List<humans> ();
-		float currentDist = 500;
+		List<humans> humansL = new List<humans>();
 		Collider[] humanColliders = Physics.OverlapSphere (transform.position, 500);
 		foreach (Collider humanCollider in humanColliders) {
 			if (humanCollider.gameObject.CompareTag ("Humanoid")) {
-				if (Vector3.Distance (humanCollider.gameObject.transform.position, transform.position) < currentDist) {
-					currentHuman = humanCollider.gameObject;
-					currentHumanPos = humanCollider.gameObject.transform.position;
-					currentHumanDist = Vector3.Distance (currentHuman.transform.position, transform.position);
-//					humansL.Add (new humans(currentHuman,currentHumanPos,currentHumanDist));
-				}
+				currentHuman = humanCollider.gameObject;
+				currentHumanDist = Vector3.Distance (currentHuman.transform.position, transform.position);
+				humansL.Add (new humans(currentHuman, currentHumanDist));
+
+
 			}
 
 		}
-		return null;
-//		return humansL;
-		}
+		humansL.Sort ();
+		return humansL;
+	}
 }

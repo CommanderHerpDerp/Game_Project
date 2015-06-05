@@ -20,8 +20,7 @@ public class SapletGrowth : MonoBehaviour {
 			Mathf.FloorToInt(GrowthTimer);
 		if (GrowthTimer >= GrowthTime) {
 			plantspot = transform.position;
-			DestroyParentGameObject Sapdestroy=Saplet.GetComponent<DestroyParentGameObject>();
-			Sapdestroy.DestroyObj();
+			Destroy (Saplet);
 			GameObject newTree = Instantiate (Resources.Load (Tree.name)) as GameObject;
 			newTree.transform.position=plantspot;		
 		}
