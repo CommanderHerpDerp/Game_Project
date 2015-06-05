@@ -12,10 +12,14 @@ public class PlaceableBuilding : MonoBehaviour {
 
 	void OnGUI() {
 		if (isSelected) {
-			GUI.Button(new Rect(Screen.width /2, Screen.height / 20, 100, 30), bName);
-			if (bName =="") {
-				GUI.Button(new Rect(Screen.width /2, Screen.height / 20, 100, 30),name);
-			}
+			string tempName;
+
+			if (bName =="")
+				tempName = name;
+			else
+				tempName = bName;
+			GUI.Button(new Rect(Screen.width /2, Screen.height / 20, 100, 30),tempName);
+
 		}
 		
 	}
@@ -34,6 +38,7 @@ public class PlaceableBuilding : MonoBehaviour {
 	
 	public void SetSelected(bool s) {
 		isSelected = s;	
+		GetComponent<Inventory> ().drawInv = s;
 	}
 
 	

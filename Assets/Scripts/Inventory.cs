@@ -4,6 +4,8 @@ using System.Collections.Generic;
 
 public class Inventory : MonoBehaviour {
 	public int inventorySlots = 63;
+	[HideInInspector]
+	public bool drawInv = false;
 	[SerializeField]
 	public ItemManager.ItemStack[] slots;
 	public ItemManager.ItemStack AddTo(int slot, ItemManager.ItemStack itemStack){
@@ -57,4 +59,31 @@ public class Inventory : MonoBehaviour {
 	void Update () {
 	
 	}
+
+	void OnGUI(){
+		if (!drawInv)
+			return;
+		int left = Screen.width - 500;
+		int top = 15;
+		int width = 485;
+		//int height = 450;
+		int hPad = 5;
+		int vPad = 5;
+		int vOffset = 15;
+		int hSpacer = 2;
+		int vSpacer = 2;
+		int height = Mathf.FloorToInt(7 * (width - 2 * hPad + hSpacer) / 9)+vOffset;
+		GUI.Box (new Rect (left, top, width, height), "Inventory");
+		for (int a=0; a<7; a++) {
+			for(int b=0; b<9; b++) {
+				int bWidth = Mathf.FloorToInt((width-2*hPad+hSpacer)/9)-hSpacer;
+				int bHeight= Mathf.FloorToInt((height-2*vPad+vSpacer-vOffset)/7)-vSpacer;
+				int bLeft = left + hPad + b*(bWidth+hSpacer);
+				int bTop = top + vPad + vOffset + a*(bHeight+vSpacer);
+				GUI.Box(new Rect (bLeft, bTop, bWidth ,bHeight ), "Wood");
+				GUI.Label(new Rect(bLeft+bWidth - 20,bTop+bHeight-20,20,20),"0");
+			}
+		}
+	}
+
 }
