@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using UnityEngine.EventSystems;
 
 public class BuildingPlacement : MonoBehaviour {
 	
@@ -25,6 +26,7 @@ public class BuildingPlacement : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+
 		Ray p = camera2.ScreenPointToRay(Input.mousePosition);
 		if (Physics.Raycast (p, out hit, Mathf.Infinity,terrainMask)) {
 
@@ -48,18 +50,20 @@ public class BuildingPlacement : MonoBehaviour {
 					}
 				}
 			} else {
-				if (Input.GetMouseButtonDown (0)) {;
-					if (Physics.Raycast (p, out hit, Mathf.Infinity, buildingsMask)) {
-						if (placeableBuildingOld != null) {
-							placeableBuildingOld.SetSelected (false);
+				if (Input.GetMouseButtonDown (0)){
+					//if(!EventSystem.current.IsPointerOverGameObject()){
+						if (Physics.Raycast (p, out hit, Mathf.Infinity, buildingsMask)) {
+							if (placeableBuildingOld != null) {
+								placeableBuildingOld.SetSelected (false);
+							}
+							hit.collider.gameObject.GetComponent<PlaceableBuilding> ().SetSelected (true);
+							placeableBuildingOld = hit.collider.gameObject.GetComponent<PlaceableBuilding> ();
+						} else {
+							if (placeableBuildingOld != null) {
+								placeableBuildingOld.SetSelected (false);
+							}
 						}
-						hit.collider.gameObject.GetComponent<PlaceableBuilding> ().SetSelected (true);
-						placeableBuildingOld = hit.collider.gameObject.GetComponent<PlaceableBuilding> ();
-					} else {
-						if (placeableBuildingOld != null) {
-							placeableBuildingOld.SetSelected (false);
-						}
-					}
+					//}
 				}
 			}
 		}

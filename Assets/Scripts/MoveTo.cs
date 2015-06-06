@@ -12,7 +12,7 @@ public class MoveTo : MonoBehaviour {
 		if (Input.GetMouseButtonDown(0)) {
 			RaycastHit hit;
 			
-			if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit, 100)) {
+			if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit,Mathf.Infinity, 1<<0)) {
 				agent.destination = hit.point;
 			}
 		}

@@ -45,10 +45,14 @@ public class Inventory : MonoBehaviour {
 	}
 
 	public ItemManager.ItemStack Remove(int slot){
-		ItemManager.ItemStack temp;
-		temp = slots [slot];
-		slots [slot] = null;
-		return temp;
+		if (slot<slots.Length){
+			ItemManager.ItemStack temp;
+			temp = slots [slot];
+			slots [slot] = null;
+			return temp;
+		}
+		else
+			return null;
 	}
 	// Use this for initialization
 	void Start () {
@@ -73,16 +77,27 @@ public class Inventory : MonoBehaviour {
 		int hSpacer = 2;
 		int vSpacer = 2;
 		int height = Mathf.FloorToInt(7 * (width - 2 * hPad + hSpacer) / 9)+vOffset;
+		int bWidth = Mathf.FloorToInt((width-2*hPad+hSpacer)/9)-hSpacer;
+		int bHeight= Mathf.FloorToInt((height-2*vPad+vSpacer-vOffset)/7)-vSpacer;
 		GUI.Box (new Rect (left, top, width, height), "Inventory");
 		for (int a=0; a<7; a++) {
 			for(int b=0; b<9; b++) {
-				int bWidth = Mathf.FloorToInt((width-2*hPad+hSpacer)/9)-hSpacer;
-				int bHeight= Mathf.FloorToInt((height-2*vPad+vSpacer-vOffset)/7)-vSpacer;
+				int i = b+9*a;
 				int bLeft = left + hPad + b*(bWidth+hSpacer);
 				int bTop = top + vPad + vOffset + a*(bHeight+vSpacer);
-				GUI.Box(new Rect (bLeft, bTop, bWidth ,bHeight ), "Wood");
-				GUI.Label(new Rect(bLeft+bWidth - 20,bTop+bHeight-20,20,20),"0");
+				if (!(slots[i]==null)){
+					GUI.Box(new Rect (bLeft, bTop, bWidth ,bHeight ), slots[i].item.friendlyName);
+					GUI.Label(new Rect(bLeft+bWidth - 10,bTop+bHeight-20,20,20),slots[i].stackSize.ToString());
+				}
+				else
+					GUI.Box(new Rect (bLeft, bTop, bWidth ,bHeight ), "");
 			}
+		}
+		if (GUI.Button (new Rect (20, Screen.height - 50, 100, 30), "Give 62 Wood")) {
+			ItemManager.ItemStack temp = new ItemManager.ItemStack(ItemManager.items["Wood.Oak"]);
+			temp.stackSize=62;
+			int slot;
+			Add (temp,out slot);
 		}
 	}
 

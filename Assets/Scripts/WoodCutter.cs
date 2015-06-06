@@ -2,9 +2,9 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
-public class MoveThroughSequence : MonoBehaviour
+public class WoodCutter : MonoBehaviour
 {
-	private List<Vector3> targets;
+	private List<Vector3> destinations;
 	private NavMeshAgent agent;
 	private int i=0;
 //	public Transform marker;
@@ -13,14 +13,18 @@ public class MoveThroughSequence : MonoBehaviour
 	private GameObject TreeObj;
 	private Vector3 HomePosition;
 	private bool HadFirstUpdate;
+	private Inventory inventory;
+	private Inventory parentInv;
 
 
 	// Use this for initialization
 	void Start () {
+		inventory = GetComponent<Inventory> ();
+		parentInv = transform.parent.gameObject.GetComponent<Inventory>();
 		HomePosition = transform.position;
 		agent = GetComponent<NavMeshAgent>();
-		targets = new List<Vector3> ();
-		targets.Add (HomePosition);
+		destinations = new List<Vector3> ();
+		destinations.Add (HomePosition);
 		agent.destination = HomePosition;
 
 		//hack to stop derpy moving on spawn
@@ -44,15 +48,33 @@ public class MoveThroughSequence : MonoBehaviour
 
 			CollectTimer += Time.deltaTime;
 			if (CollectTimer >= CollectTime){
-				if(targets.Count!=0){
+				if(destinations.Count!=0){
 					if(i==0){
+						if (!(inventory.slots[0]==null)){
+								int slot;
+								inventory.slots[0] = parentInv.Add(inventory.slots[0],out slot);
+							}
 						SetTargetsForTree();
 					}
 					if(i==1){
-						Destroy (TreeObj);
+						if(inventory.slots[0]==null){
+							Destroy (TreeObj);
+							ItemManager.ItemStack wood = new ItemManager.ItemStack(ItemManager.items["Wood.Oak"]);
+							wood.stackSize = 1;
+							int slot;
+							inventory.Add(wood, out slot);
+						}
+						else if(inventory.slots[0].stackSize<inventory.slots[0].maxStackSize){
+							Destroy (TreeObj);
+							inventory.slots[0].stackSize++;
+						}
+						else{
+							destinations.Clear ();
+							destinations.Add (HomePosition);
+						}
 					}
 
-					if(i == targets.Count-1)
+					if(i == destinations.Count-1)
 						i=0;
 					else
 						i++;
@@ -60,7 +82,7 @@ public class MoveThroughSequence : MonoBehaviour
 					CollectTimer=0;
 
 					//next destination
-					agent.destination=targets[i];
+					agent.destination=destinations[i];
 				}
 			}
 
@@ -72,14 +94,14 @@ public class MoveThroughSequence : MonoBehaviour
 		if(TreeObj!=null){	
 			TreeObj.tag = "tree.tagged";
 			print (TreeObj.name);
-			targets.Clear();
-			targets.Add(HomePosition);
-			targets.Add(TreeObj.transform.position);
+			destinations.Clear();
+			destinations.Add(HomePosition);
+			destinations.Add(TreeObj.transform.position);
 		}
 		else
 		{
-			targets.Clear();
-			targets.Add (HomePosition);
+			destinations.Clear();
+			destinations.Add (HomePosition);
 		}
 	}
 
@@ -109,10 +131,10 @@ public class MoveThroughSequence : MonoBehaviour
 		int testRadius = 15;
 		int testPoints = 5;
 		for (int a=0; a<testPoints; a++) {
-			targets.Add(new Vector3 (testRadius * Mathf.Cos(2*a * Mathf.PI /testPoints),0,testRadius * Mathf.Sin(2*a * Mathf.PI /testPoints)));
+			destinations.Add(new Vector3 (testRadius * Mathf.Cos(2*a * Mathf.PI /testPoints),0,testRadius * Mathf.Sin(2*a * Mathf.PI /testPoints)));
 //			Instantiate (marker, targets[a] + new Vector3(0,4,0), Quaternion.identity);
 		}
-		agent.destination = targets [i];
+		agent.destination = destinations [i];
 	}
 }
 

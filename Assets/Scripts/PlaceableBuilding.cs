@@ -18,7 +18,7 @@ public class PlaceableBuilding : MonoBehaviour {
 				tempName = name;
 			else
 				tempName = bName;
-			GUI.Button(new Rect(Screen.width /2, Screen.height / 20, 100, 30),tempName);
+			GUI.Button(new Rect(Screen.width /2-100, Screen.height / 20, 100, 30),tempName);
 
 		}
 		
