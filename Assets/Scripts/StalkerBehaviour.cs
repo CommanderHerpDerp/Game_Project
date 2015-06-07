@@ -3,7 +3,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
-public class Stalker : MonoBehaviour {
+public class StalkerBehaviour : MonoBehaviour {
 	private NavMeshAgent agent;
 	public class humans : IComparable<humans>
 	{

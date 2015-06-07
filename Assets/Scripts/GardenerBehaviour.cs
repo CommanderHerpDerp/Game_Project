@@ -2,15 +2,15 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class Gardening : MonoBehaviour {
+public class GardenerBehaviour : MonoBehaviour {
 	private NavMeshAgent agent;
-	private List<Vector3> orders;
-	private Vector3 Homeposition;
+	private List<Vector3> destinations;
+	private Vector3 homePosition;
 	private List<Sapling> saplings;
 	private int i=0;
-	public float CollectTime =5;
-	private float CollectTimer;
-	public GameObject Saplet;
+	public float collectTime =5;
+	private float collectTimer;
+	public GameObject sapling;
 	public GameObject marker;
 	private Forest forest;
 	
@@ -38,12 +38,12 @@ public class Gardening : MonoBehaviour {
 	
 	
 	void Start () {
-		Homeposition = transform.position;
+		homePosition = transform.position;
 		agent = GetComponent<NavMeshAgent> ();
-		agent.destination = Homeposition;
+		agent.destination = homePosition;
 		//this will set a list of locations of saplets for the gardener to go and plant at
-		orders = new List<Vector3> ();
-		orders.Add (Homeposition);
+		destinations = new List<Vector3> ();
+		destinations.Add (homePosition);
 		//This will now decide where the forest is going to be created
 		Vector3 coForestA = transform.position + new Vector3 (-25, 0, -10);
 		Vector3 coForestB = transform.position + new Vector3 (-25, 0, 10);
@@ -76,37 +76,37 @@ public class Gardening : MonoBehaviour {
 		if (agent.remainingDistance < agent.stoppingDistance) {
 			//move to next point or back to first if at the last point
 			
-			CollectTimer += Time.deltaTime;
-			if (CollectTimer >= CollectTime){
-				if(orders.Count!=0){
+			collectTimer += Time.deltaTime;
+			if (collectTimer >= collectTime){
+				if(destinations.Count!=0){
 					if(i==0){
 						foreach (Sapling sap in saplings){sap.planned=false;}
 						SetOrdersForSaplings();
 					}
 					if(i>=1){
-						GameObject newTree = Instantiate (Resources.Load (Saplet.name)) as GameObject;
-						newTree.transform.position=orders[i];
+						GameObject newTree = Instantiate (Resources.Load (sapling.name)) as GameObject;
+						newTree.transform.position=destinations[i];
 					}
 					
-					if(i == orders.Count-1)
+					if(i == destinations.Count-1)
 						i=0;
 					else
 						i++;
 					
-					CollectTimer=0;
+					collectTimer=0;
 					
 					//next destination
-					agent.destination=orders[i];
+					agent.destination=destinations[i];
 				}
 			}
 			
 		}
 	}
 	void SetOrdersForSaplings(){
-		orders.Clear();
-		orders.Add(Homeposition);
+		destinations.Clear();
+		destinations.Add(homePosition);
 		foreach (Sapling sap in saplings) {
-			if (!sap.planned && orders.Count<5) {
+			if (!sap.planned && destinations.Count<5) {
 				Collider[] treecolliders = Physics.OverlapSphere (sap.position, 1);
 				bool notTerrain =false;
 				foreach (Collider treeCollider in treecolliders) {
@@ -115,7 +115,7 @@ public class Gardening : MonoBehaviour {
 					}
 				}
 				if (!notTerrain){
-				orders.Add (sap.position);
+				destinations.Add (sap.position);
 					sap.planned =true;}
 
 			}

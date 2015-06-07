@@ -38,7 +38,7 @@ public class PlaceableBuilding : MonoBehaviour {
 	
 	public void SetSelected(bool s) {
 		isSelected = s;	
-		GetComponent<Inventory> ().drawInv = s;
+		GetComponent<InventoryBase> ().drawInv = s;
 	}
 
 	
