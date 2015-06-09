@@ -9,15 +9,13 @@ public class ItemManager : MonoBehaviour {
 		public string name;
 		public string friendlyName;
 		public Texture2D icon;
-		public int maxStackSize;
 		public bool isSmeltable;
 		public bool isFuel;
 
-		public Item(string name,string friendlyName, Texture2D icon,int maxStackSize, bool isSmeltable, bool isFuel){
+		public Item(string name,string friendlyName, Texture2D icon, bool isSmeltable, bool isFuel){
 			this.name = name;
 			this.friendlyName = friendlyName;
 			this.icon = icon;
-			this.maxStackSize = maxStackSize;
 			this.isSmeltable = isSmeltable;
 			this.isFuel = isFuel;
 		}
@@ -26,35 +24,33 @@ public class ItemManager : MonoBehaviour {
 	public class ItemStack{
 		public Item item;
 		public int stackSize;
-		public int maxStackSize{
-			get; private set;
-		}
+		public int maxStackSize;
 		public ItemStack(Item item){
 			this.item = item;
-			this.stackSize = 1;
-			this.maxStackSize = item.maxStackSize;
+			this.stackSize = 0;
+			this.maxStackSize = 1;
 		}
 
-		public int add(int amount){
-			if (stackSize + amount <= maxStackSize) {
-				stackSize += amount;
-				return 0;
-			} else {
-				int overflow = stackSize + amount - maxStackSize;
-				stackSize = maxStackSize;
-				return overflow;
+		public ItemStack add(ItemStack item){
+			if (item.item == this.item){
+				if (stackSize + item.stackSize <= maxStackSize||maxStackSize==-1) {
+					stackSize += item.stackSize;
+					item.stackSize = 0;
+				} else {
+					int overflow = stackSize + item.stackSize - maxStackSize;
+					stackSize = maxStackSize;
+					item.stackSize = overflow;
+				}
 			}
+				return item;
 		}
 	}
 	public static Dictionary<string,Item> items = new Dictionary<string,Item>();
 
-	private void ItemsAdd(string nameid, string friendlyName, Texture2D icon, int maxStackSize, bool isSmeltable, bool isFuel){
-		items.Add (nameid,new Item(nameid,friendlyName,icon,maxStackSize,isSmeltable,isFuel));
+	private void ItemsAdd(string nameid, string friendlyName, Texture2D icon, bool isSmeltable, bool isFuel){
+		items.Add (nameid,new Item(nameid,friendlyName,icon,isSmeltable,isFuel));
 	}
 
-	public Item GetItemByKey(string key){
-		return items[key];
-	}
 
 
 
@@ -65,8 +61,8 @@ public class ItemManager : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		ItemsAdd("Wood.Oak","Oak Wood",woodIcon,64,false,true);
-		ItemStack test = new ItemStack (items ["Wood.Oak"]);
+		ItemsAdd("resource.wood","Wood",woodIcon,false,true);
+		ItemStack test = new ItemStack (items ["resource.wood"]);
 
 		
 	}
