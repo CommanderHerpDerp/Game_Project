@@ -56,13 +56,17 @@ public class ItemManager : MonoBehaviour {
 
 	[SerializeField]
 	private Texture2D woodIcon=null;
+	[SerializeField]
+	private Texture2D stoneIcon=null;
+
 
 
 
 	// Use this for initialization
 	void Start () {
 		ItemsAdd("resource.wood","Wood",woodIcon,false,true);
-		ItemStack test = new ItemStack (items ["resource.wood"]);
+		ItemsAdd("resource.stone","Stone",stoneIcon,false,true);
+
 
 		
 	}
